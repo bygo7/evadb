@@ -12,4 +12,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""third party"""
+from evadb.interfaces.relational.db import (  # noqa: E402,F401
+    EvaDBConnection,
+    EvaDBCursor,
+    connect,
+)
+from evadb.interfaces.relational.relation import EvaDBQuery  # noqa: E402,F401
+
+from .version import VERSION as __version__  # noqa: E402,F401
+
+PYTHON_APIS = ["connect"]
+
+__all__ = list(PYTHON_APIS)

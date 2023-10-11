@@ -12,4 +12,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""third party"""
+import logging
+
+__all__ = ["logger"]
+
+
+LOG_handler = logging.StreamHandler()
+LOG_formatter = logging.Formatter(
+    fmt="%(asctime)-15s %(levelname)-6s"
+    "[%(module)s:%(filename)s:%(funcName)s:%(lineno)04d] %(message)s",
+    datefmt="%m-%d-%Y %H:%M:%S",
+)
+LOG_handler.setFormatter(LOG_formatter)
+
+logger = logging.getLogger(__name__)
+logger.addHandler(LOG_handler)
+logger.setLevel(logging.WARN)

@@ -12,4 +12,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""third party"""
+from evadb.parser.show_statement import ShowStatement
+from evadb.parser.types import ShowType
+
+
+##################################################################
+# SHOW STATEMENT
+##################################################################
+class Show:
+    def show_statement(self, tree):
+        token = tree.children[1]
+
+        if str.upper(token) == "FUNCTIONS":
+            return ShowStatement(show_type=ShowType.FUNCTIONS)
+        elif str.upper(token) == "TABLES":
+            return ShowStatement(show_type=ShowType.TABLES)

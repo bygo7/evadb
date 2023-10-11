@@ -12,4 +12,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""third party"""
+from lark import Tree
+
+from evadb.parser.use_statement import UseStatement
+
+
+class Use:
+    def use_statement(self, tree):
+        for child in tree.children:
+            if isinstance(child, Tree):
+                if child.data == "database_name":
+                    database_name = self.visit(child)
+                if child.data == "query_string":
+                    query_string = self.visit(child)
+        return UseStatement(database_name, query_string)

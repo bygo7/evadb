@@ -12,4 +12,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""third party"""
+from lark import Tree
+
+from evadb.parser.explain_statement import ExplainStatement
+
+
+class Explain:
+    def explain_statement(self, tree):
+        explainable_stmt = None
+
+        for child in tree.children:
+            if isinstance(child, Tree):
+                if child.data.endswith("explainable_statement"):
+                    explainable_stmt = self.visit(child)
+
+        return ExplainStatement(explainable_stmt)
