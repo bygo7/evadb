@@ -21,7 +21,7 @@ import shutil
 import sys
 import uuid
 from pathlib import Path
-from typing import Iterator, List
+from typing import List
 from urllib.parse import urlparse
 
 from aenum import AutoEnum, unique
@@ -173,28 +173,6 @@ def get_size(obj, seen=None):
     return size
 
 
-def rebatch(it: Iterator, batch_mem_size: int = 30000000) -> Iterator:
-    """
-    Utility function to rebatch the rows
-    Args:
-        it (Iterator): an iterator for rows, every row is a dictionary
-        batch_mem_size (int): the maximum batch memory size
-    Yields:
-        data_batch (List): a list of rows, every row is a dictionary
-    """
-    data_batch = []
-    row_size = None
-    for row in it:
-        data_batch.append(row)
-        if row_size is None:
-            row_size = get_size(data_batch)
-        if len(data_batch) * row_size >= batch_mem_size:
-            yield data_batch
-            data_batch = []
-    if data_batch:
-        yield data_batch
-
-
 def get_str_hash(s: str) -> str:
     return hashlib.md5(s.encode("utf-8")).hexdigest()
 
@@ -292,23 +270,13 @@ def try_to_import_ray():
         )
 
 
-def try_to_import_statsforecast():
+def try_to_import_forecast():
     try:
         from statsforecast import StatsForecast  # noqa: F401
     except ImportError:
         raise ValueError(
             """Could not import StatsForecast python package.
                 Please install it with `pip install statsforecast`."""
-        )
-
-
-def try_to_import_neuralforecast():
-    try:
-        from neuralforecast import NeuralForecast  # noqa: F401
-    except ImportError:
-        raise ValueError(
-            """Could not import NeuralForecast python package.
-                Please install it with `pip install neuralforecast`."""
         )
 
 
@@ -351,8 +319,7 @@ def is_ludwig_available() -> bool:
 
 def is_forecast_available() -> bool:
     try:
-        try_to_import_statsforecast()
-        try_to_import_neuralforecast()
+        try_to_import_forecast()
         return True
     except ValueError:  # noqa: E722
         return False

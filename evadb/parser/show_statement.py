@@ -14,25 +14,18 @@
 # limitations under the License.
 from __future__ import annotations
 
-from typing import Optional
-
 from evadb.parser.statement import AbstractStatement
 from evadb.parser.types import ShowType, StatementType
 
 
 class ShowStatement(AbstractStatement):
-    def __init__(self, show_type: ShowType, show_val: Optional[str] = ""):
+    def __init__(self, show_type: ShowType):
         super().__init__(StatementType.SHOW)
         self._show_type = show_type
-        self._show_val = show_val.upper()
 
     @property
     def show_type(self):
         return self._show_type
-
-    @property
-    def show_val(self):
-        return self._show_val
 
     def __str__(self):
         show_str = ""
@@ -40,15 +33,13 @@ class ShowStatement(AbstractStatement):
             show_str = "FUNCTIONS"
         elif self.show_type == ShowType.TABLES:
             show_str = "TABLES"
-        elif self.show_type == ShowType.CONFIG:
-            show_str = self.show_val
 
         return f"SHOW {show_str}"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ShowStatement):
             return False
-        return self.show_type == other.show_type and self.show_val == other.show_val
+        return self.show_type == other.show_type
 
     def __hash__(self) -> int:
-        return hash((super().__hash__(), self.show_type, self.show_val))
+        return hash((super().__hash__(), self.show_type))

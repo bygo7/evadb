@@ -832,19 +832,8 @@ class LogicalCreateIndexToVectorIndex(Rule):
             before.table_ref,
             before.col_list,
             before.vector_store_type,
-            before.project_expr_list,
-            before.index_def,
+            before.function,
         )
-        child = SeqScanPlan(None, before.project_expr_list, before.table_ref.alias)
-        batch_mem_size = context.db.config.get_value("executor", "batch_mem_size")
-        child.append_child(
-            StoragePlan(
-                before.table_ref.table.table_obj,
-                before.table_ref,
-                batch_mem_size=batch_mem_size,
-            )
-        )
-        after.append_child(child)
         yield after
 
 
@@ -1236,7 +1225,7 @@ class LogicalShowToPhysical(Rule):
         return True
 
     def apply(self, before: LogicalShow, context: OptimizerContext):
-        after = ShowInfoPlan(before.show_type, before.show_val)
+        after = ShowInfoPlan(before.show_type)
         yield after
 
 

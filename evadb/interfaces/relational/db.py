@@ -231,7 +231,6 @@ class EvaDBCursor(object):
                 speechrecognizer.response
             0	"Sample Text from speech recognizer"
         """
-        # This df is only used by `create_vector_index`. All other APIs use the `df()` in EvaDBQuery.
         if not self._result:
             raise Exception("No valid result with the current cursor")
         return self._result.frames
@@ -271,7 +270,6 @@ class EvaDBCursor(object):
 
         """
         stmt = parse_create_vector_index(index_name, table_name, expr, using)
-        # TODO: move create_vector_index into EvaDBQuery.
         self._result = execute_statement(self._evadb, stmt)
         return self
 
@@ -445,6 +443,7 @@ class EvaDBCursor(object):
             2     5     6
         """
         stmt = parse_query(sql_query)
+        # print("cursor.query::", stmt)
         return EvaDBQuery(self._evadb, stmt)
 
     def show(self, object_type: str, **kwargs) -> EvaDBQuery:

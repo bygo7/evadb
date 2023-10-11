@@ -32,7 +32,7 @@ class UseExecutor(AbstractExecutor):
         db_catalog_entry = self.db.catalog().get_database_catalog_entry(
             self._database_name
         )
-
+        # print("use_executor::", db_catalog_entry)
         if db_catalog_entry is None:
             raise ExecutorError(
                 f"{self._database_name} data source does not exist. Use CREATE DATABASE to add a new data source."

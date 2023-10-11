@@ -16,10 +16,7 @@ from typing import Iterator
 
 from evadb.database import EvaDBDatabase
 from evadb.executor.abstract_executor import AbstractExecutor
-from evadb.executor.executor_utils import (
-    apply_predicate,
-    instrument_function_expression_cost,
-)
+from evadb.executor.executor_utils import apply_predicate
 from evadb.models.storage.batch import Batch
 from evadb.plan_nodes.predicate_plan import PredicatePlan
 
@@ -34,9 +31,6 @@ class PredicateExecutor(AbstractExecutor):
     def exec(self, *args, **kwargs) -> Iterator[Batch]:
         child_executor = self.children[0]
         for batch in child_executor.exec(**kwargs):
-            batch = apply_predicate(batch, self.predicate)
+            batch = apply_predicate(batch, self.predicate, self.catalog())
             if not batch.empty():
                 yield batch
-
-        # perform any required instrumentation before we return
-        instrument_function_expression_cost(self.predicate, self.catalog())

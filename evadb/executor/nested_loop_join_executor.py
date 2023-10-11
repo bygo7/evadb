@@ -16,10 +16,7 @@ from typing import Iterator
 
 from evadb.database import EvaDBDatabase
 from evadb.executor.abstract_executor import AbstractExecutor
-from evadb.executor.executor_utils import (
-    apply_predicate,
-    instrument_function_expression_cost,
-)
+from evadb.executor.executor_utils import apply_predicate
 from evadb.models.storage.batch import Batch
 from evadb.plan_nodes.nested_loop_join_plan import NestedLoopJoinPlan
 
@@ -36,10 +33,8 @@ class NestedLoopJoinExecutor(AbstractExecutor):
             for row2 in inner.exec(**kwargs):
                 result_batch = Batch.join(row1, row2)
                 result_batch.reset_index()
-                result_batch = apply_predicate(result_batch, self.predicate)
+                result_batch = apply_predicate(
+                    result_batch, self.predicate, self.catalog()
+                )
                 if not result_batch.empty():
                     yield result_batch
-
-        # instrument required stats
-        if self.predicate:
-            instrument_function_expression_cost(self.predicate, self.catalog())

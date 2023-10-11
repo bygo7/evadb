@@ -16,11 +16,7 @@ from typing import Iterator
 
 from evadb.database import EvaDBDatabase
 from evadb.executor.abstract_executor import AbstractExecutor
-from evadb.executor.executor_utils import (
-    apply_predicate,
-    apply_project,
-    instrument_function_expression_cost,
-)
+from evadb.executor.executor_utils import apply_predicate, apply_project
 from evadb.models.storage.batch import Batch
 from evadb.plan_nodes.hash_join_probe_plan import HashJoinProbePlan
 
@@ -42,12 +38,8 @@ class HashJoinExecutor(AbstractExecutor):
                 probe_batch.reassign_indices_to_hash(hash_keys)
                 join_batch = Batch.join(probe_batch, build_batch)
                 join_batch.reset_index()
-                join_batch = apply_predicate(join_batch, self.predicate)
-                join_batch = apply_project(join_batch, self.join_project)
+                join_batch = apply_predicate(join_batch, self.predicate, self.catalog())
+                join_batch = apply_project(
+                    join_batch, self.join_project, self.catalog()
+                )
                 yield join_batch
-
-        # instrument required stats
-        if self.predicate or self.join_project:
-            catalog = self.catalog()
-            instrument_function_expression_cost(self.predicate, catalog)
-            instrument_function_expression_cost(self.join_project, catalog)

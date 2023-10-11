@@ -192,7 +192,7 @@ class CatalogManager(object):
             resp = handler.get_tables()
 
             if resp.error is not None:
-                raise Exception(resp.error)
+                return False
 
             # Check table existence.
             table_df = resp.data
@@ -414,15 +414,9 @@ class CatalogManager(object):
         vector_store_type: VectorStoreType,
         feat_column: ColumnCatalogEntry,
         function_signature: str,
-        index_def: str,
     ) -> IndexCatalogEntry:
         index_catalog_entry = self._index_service.insert_entry(
-            name,
-            save_file_path,
-            vector_store_type,
-            feat_column,
-            function_signature,
-            index_def,
+            name, save_file_path, vector_store_type, feat_column, function_signature
         )
         return index_catalog_entry
 

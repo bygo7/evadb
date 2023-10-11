@@ -43,6 +43,7 @@ class EvaDBQuery:
         query_node: Union[AbstractStatement, TableRef],
         alias: Alias = None,
     ):
+        # print(query_node, alias)
         self._evadb = evadb
         self._query_node = query_node
         self._alias = alias
@@ -101,48 +102,26 @@ class EvaDBQuery:
         try_binding(self._evadb.catalog, self._query_node)
         return self
 
-    def df(self, drop_alias: bool = True) -> pandas.DataFrame:
-        """
-        Execute and fetch all rows as a pandas DataFrame
-
-        Args:
-            drop_alias (bool): whether to drop the table name in the output dataframe. Default: True.
+    def df(self) -> pandas.DataFrame:
+        """Execute and fetch all rows as a pandas DataFrame
 
         Returns:
             pandas.DataFrame:
-
-        Example:
-
-        Runs a SQL query and get a panda Dataframe.
-            >>> cursor.query("SELECT * FROM MyTable;").df()
-                col1  col2
-            0      1     2
-            1      3     4
-            2      5     6
         """
-        batch = self.execute(drop_alias=drop_alias)
-        assert batch.frames is not None, "relation execute failed"
+        # print("EvaDBQuery::", self._query_node, self._alias)
+        batch = self.execute()
+        assert batch is not None, "relation execute failed"
         return batch.frames
 
-    def execute(self, drop_alias: bool = True) -> Batch:
+    def execute(self) -> Batch:
         """Transform the relation into a result set
-
-        Args:
-            drop_alias (bool): whether to drop the table name in the output batch. Default: True.
 
         Returns:
             Batch: result as evadb Batch
-
-        Example:
-
-            Runs a SQL query and get a Batch
-            >>> batch = cursor.query("SELECT * FROM MyTable;").execute()
         """
-        result = execute_statement(self._evadb, self._query_node.copy())
-        # TODO: this is a dirty implementation. Ideally this should be done in the final projection.
-        if drop_alias:
-            result.drop_column_alias()
-        assert result is not None
+        result = execute_statement(self._evadb, self._query_node)
+        # print("EvaDBQuery::result::", result)
+        assert result.frames is not None
         return result
 
     def filter(self, expr: str) -> "EvaDBQuery":
