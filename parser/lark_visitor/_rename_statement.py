@@ -12,4 +12,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""third party"""
+
+from evadb.parser.rename_statement import RenameTableStatement
+from evadb.parser.table_ref import TableRef
+
+
+class RenameTable:
+    def rename_table(self, tree):
+        old_table_info = self.visit(tree.children[2])
+        new_table_info = self.visit(tree.children[4])
+        return RenameTableStatement(TableRef(old_table_info), new_table_info)

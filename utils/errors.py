@@ -12,4 +12,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""third party"""
+class CatalogError(Exception):
+    pass
+
+
+class FunctionIODefinitionError(Exception):
+    pass
+
+
+class DatasetFileNotFoundError(Exception):
+    def __init__(
+        self,
+        message="The dataset file could not be found. Please verify that the file exists in the specified path.",
+    ):
+        super().__init__(message)
