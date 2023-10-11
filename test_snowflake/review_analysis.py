@@ -10,7 +10,7 @@ cursor = evadb.connect().cursor()
 def putQueries(cursor, database_name, queries):
     outputs = []
     for query in queries:
-        output.append(cursor.query(f"USE {database_name}" + " { " + f"{query}" + " }").df())
+        outputs.append(cursor.query(f"USE {database_name}" + " { " + f"{query}" + " }").df())
     return outputs
 
 # Create Database
