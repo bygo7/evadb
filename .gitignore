@@ -126,7 +126,7 @@ env_eva/
 *.pkl
 
 # data
-data/*
+!data/assets/*
 !data/README.md
 !data/ua_detrac/README.md
 !data/ua_detrac/*.sh
