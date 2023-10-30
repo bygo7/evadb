@@ -93,3 +93,6 @@ https://colab.research.google.com/github/georgia-tech-db/eva/blob/staging/tutori
 https://docs.snowflake.com/en/developer-guide/sql-api/index
 https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-api
 https://docs.snowflake.com/en/developer-guide/python-connector/sqlalchemy
+
+### Requirements.txt
+https://github.com/bygo7/evadb-snowflake/evadb/third_party/databases/snowflake/requirements.txt
