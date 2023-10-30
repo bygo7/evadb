@@ -76,11 +76,11 @@ From "SELECT * FROM review_table"
 ```
 
 From the first ChatGPT query
-      <img width="90%" src="https://github.com/bygo7/evadb-snowflake/tree/staging/data/assets/snowflake_query1" alt="EvaDB Star History Chart">
+      <img width="90%" src="https://github.com/bygo7/evadb-snowflake/tree/staging/data/assets/snowflake_query1">
 
 
 From the second ChatGPT query
-      <img width="90%" src="https://github.com/bygo7/evadb-snowflake/tree/staging/data/assets/snowflake_query2" alt="EvaDB Star History Chart">
+      <img width="90%" src="https://github.com/bygo7/evadb-snowflake/tree/staging/data/assets/snowflake_query2">
 
 
 ### Lessons learned
